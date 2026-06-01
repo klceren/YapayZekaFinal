@@ -1,14 +1,16 @@
-# 🩺 Şeker Hastalığı (Diabetes) Teşhisi — Makine Öğrenmesi Projesi
+# 🩺 Şeker Hastalığı Teşhisi — Makine Öğrenmesi Projesi
 
 ## 📌 Projenin Amacı
-Bu projede Pima Kızılderilileri veri seti kullanılarak **şeker hastalığı (diyabet) teşhisi**
-makine öğrenmesi ile gerçekleştirilmiştir. Problem bir **ikili sınıflandırma** problemidir:
-kişinin diyabetli (1) mi yoksa sağlıklı (0) mı olduğunu tahmin etmek hedeflenmiştir.
+Bu projede makine öğrenmesi algoritmaları kullanılarak **şeker hastalığı (diyabet) teşhisi** yapılmıştır.
+Kişinin sağlık ölçümlerine bakılarak diyabetli mi (1) yoksa sağlıklı mı (0) olduğu tahmin edilmektedir.
 
 ---
 
-## 📂 Veri Seti
-| Özellik | Açıklama |
+## 📂 Veri Seti Bilgileri
+
+🔗 Kaynak: https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database
+
+| Sütun Adı | Türkçe Açıklama |
 |---|---|
 | Pregnancies | Gebelik sayısı |
 | Glucose | Kan şekeri değeri |
@@ -18,40 +20,58 @@ kişinin diyabetli (1) mi yoksa sağlıklı (0) mı olduğunu tahmin etmek hedef
 | BMI | Vücut kitle indeksi |
 | DiabetesPedigreeFunction | Aile diyabet geçmişi skoru |
 | Age | Yaş |
-| **Outcome** | **Hedef: 0 = Sağlıklı, 1 = Diyabetli** |
+| Outcome | Hedef: 0 = Sağlıklı, 1 = Diyabetli |
 
-🔗 Kaynak: https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database
-
----
-
-## 🔬 Uygulanan Adımlar
-1. **Veri Tanıtımı** — Boyut, sütunlar, sınıf dağılımı
-2. **EDA** — Eksik değer analizi, aykırı değer tespiti (IQR), histogramlar, korelasyon
-3. **Model Kurma** — Lojistik Regresyon, Karar Ağacı, Random Forest
-4. **Değerlendirme** — Accuracy, Precision, Recall, F1, Confusion Matrix
+- Toplam satır sayısı: 768
+- Toplam sütun sayısı: 9
+- Sağlıklı kişi sayısı: 547 (%71.2)
+- Diyabetli kişi sayısı: 221 (%28.8)
 
 ---
 
-## 📊 Elde Edilen Sonuçlar
+## 🔬 Proje Aşamaları
 
-Üç model karşılaştırılmış ve **Random Forest** en yüksek F1 skorunu elde etmiştir.
+### 1. Veri Tanıtımı
+Veri setinin boyutu, sütunlar ve sınıf dağılımı incelendi.
 
-| Model | Accuracy | F1 Skoru |
-|---|---|---|
-| Lojistik Regresyon | ~%77 | ~%68 |
-| Karar Ağacı | ~%74 | ~%65 |
-| **Random Forest** | **~%80** | **~%72** |
+### 2. Veri Temizleme ve Analiz
+- Kan şekeri, kan basıncı gibi sütunlarda sıfır olamayacak değerler tespit edildi
+- Eksik değerler medyan ile dolduruldu
+- Aykırı değerler IQR yöntemiyle bulundu
+- Histogramlar, korelasyon ısı haritası ve dağılım grafikleri çizildi
 
-**Önemli bulgular:**
-- Glucose (kan şekeri) en belirleyici özellik olarak öne çıkmıştır.
-- BMI ve Age değişkenleri de yüksek önem skoruna sahiptir.
-- Eksik veriler medyan ile doldurulmuş, aykırı değerler raporlanmıştır.
+### 3. Model Kurma
+3 farklı makine öğrenmesi algoritması kullanıldı:
+- Lojistik Regresyon
+- Karar Ağacı
+- Rastgele Orman (Random Forest)
+
+### 4. Model Değerlendirme
+Her model; doğruluk, hassasiyet, duyarlılık ve F1 skoru ile değerlendirildi.
 
 ---
 
-## 🚀 Çalıştırma
+## 📊 Model Doğruluk Sonuçları
+
+| Model | Doğruluk | Hassasiyet | Duyarlılık | F1 Skoru |
+|---|---|---|---|---|
+| Lojistik Regresyon | %68.83 | %35.71 | %11.36 | %17.24 |
+| Karar Ağacı | %68.18 | %36.84 | %15.91 | %22.22 |
+| **Rastgele Orman** | **%70.13** | **%40.00** | **%9.09** | **%14.81** |
+
+✅ **En iyi model: Rastgele Orman** — %70.13 doğruluk oranıyla en yüksek sonucu vermiştir.
+
+### Metrik Açıklamaları
+- **Doğruluk:** Tüm tahminlerin kaçı doğru?
+- **Hassasiyet:** Diyabetli dediğimizin kaçı gerçekten diyabetli?
+- **Duyarlılık:** Gerçek diyabetlilerin kaçını yakaladık?
+- **F1 Skoru:** Hassasiyet ve duyarlılığın dengeli ortalaması
+
+---
+
+## 🚀 Projeyi Çalıştırma
+
 ```bash
 pip install pandas numpy matplotlib seaborn scikit-learn
-# diabetes.csv dosyasını aynı klasöre koy
 python diabetes_tahmin.py
 ```
